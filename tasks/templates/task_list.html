@@ -1,0 +1,155 @@
+{% extends 'base.html' %}
+
+{% block title %}Your Tasks{% endblock %}
+
+{% block content %}
+    <style>
+        /* General Styles */
+        h1, h2 {
+            text-align: center;
+            color: #6200ea;
+            margin-bottom: 1rem;
+            animation: fadeInDown 1.2s ease-in-out;
+        }
+        a {
+            text-decoration: none;
+            font-weight: bold;
+            color: #6200ea;
+            transition: color 0.3s ease, transform 0.2s ease;
+        }
+        a:hover {
+            color: #3700b3;
+            transform: scale(1.1);
+        }
+        ul {
+            list-style: none;
+            padding: 0;
+        }
+        ul li {
+            background: #fff;
+            margin: 0.5rem 0;
+            padding: 1rem;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+        ul li:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 6px 10px rgba(0, 0, 0, 0.15);
+        }
+        .task-actions a {
+            margin: 0 0.5rem;
+            padding: 0.5rem 1rem;
+            border-radius: 5px;
+            background: #6200ea;
+            color: #fff;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        .task-actions a:hover {
+            background: #3700b3;
+            transform: scale(1.05);
+        }
+        .form-container {
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 1.5rem;
+            background: #fff;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            animation: fadeInUp 1.2s ease-in-out;
+        }
+        button {
+            padding: 0.75rem 1.5rem;
+            background-color: #6200ea;
+            color: white;
+            font-weight: bold;
+            text-transform: uppercase;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            transition: background-color 0.3s ease, transform 0.2s ease;
+        }
+        button:hover {
+            background-color: #3700b3;
+            transform: scale(1.05);
+        }
+        .messages {
+            max-width: 500px;
+            margin: 2rem auto;
+            padding: 1rem;
+            border-radius: 8px;
+            background-color: #ffcccb;
+            text-align: center;
+            animation: fadeIn 1.2s ease-in-out;
+        }
+
+        /* Animations */
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+            }
+            to {
+                opacity: 1;
+            }
+        }
+        @keyframes fadeInDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+    </style>
+
+    <h1>Your Tasks</h1>
+    <a href="{% url 'task_create' %}" class="button">Add New Task</a>
+
+    <ul>
+        {% for task in tasks %}
+            <li>
+                <div>
+                    <strong>{{ task.title }}</strong> - {{ task.description }}
+                </div>
+                <div class="task-actions">
+                    <a href="{% url 'task_edit' task.pk %}">Edit</a>
+                    <a href="{% url 'task_delete' task.pk %}">Delete</a>
+                </div>
+            </li>
+        {% endfor %}
+    </ul>
+
+    <div class="form-container">
+        <h2>Invite a User</h2>
+        <form method="post">
+            {% csrf_token %}
+            {{ invite_form.as_p }}
+            <button type="submit">Send Invitation</button>
+        </form>
+    </div>
+
+    {% if messages %}
+        <div class="messages">
+            <ul>
+                {% for message in messages %}
+                    <li>{{ message }}</li>
+                {% endfor %}
+            </ul>
+        </div>
+    {% endif %}
+{% endblock %}

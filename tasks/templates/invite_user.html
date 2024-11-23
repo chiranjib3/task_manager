@@ -1,0 +1,21 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <title>Invite User</title>
+</head>
+<body>
+    <h1>Invite a User</h1>
+
+    <form method="post">
+        {% csrf_token %}
+        {{ form.as_p }}
+        <button type="submit">Send Invitation</button>
+    </form>
+
+    {% if user.is_authenticated %}
+        <p>Welcome, {{ user.username }}! You are logged in.</p>
+    {% else %}
+        <p>You need to <a href="{% url 'login' %}">login</a> to invite users.</p>
+    {% endif %}
+</body>
+</html>
